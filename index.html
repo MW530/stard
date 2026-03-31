@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>科研论文Idea记录器</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lib/katex.min.css">
+  <script src="lib/marked.min.js"></script>
+  <script defer src="lib/katex.min.js"></script>
+  <script defer src="lib/auto-render.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>科研论文Idea记录器</h1>
+      <button id="add-idea-btn" class="btn-primary">+ 新增Idea</button>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>标签筛选</h3>
+          <div id="tags-filter">
+            <button class="tag-filter active" data-tag="all">全部</button>
+            <!-- 动态生成的标签按钮 -->
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h3>分类筛选</h3>
+          <div id="categories-filter">
+            <button class="category-filter active" data-category="all">全部</button>
+            <!-- 动态生成的分类按钮 -->
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h3>排序</h3>
+          <select id="sort-select">
+            <option value="date-desc">日期（最新优先）</option>
+            <option value="date-asc">日期（最早优先）</option>
+            <option value="title-asc">标题（A-Z）</option>
+            <option value="title-desc">标题（Z-A）</option>
+            <option value="priority-desc">优先级（高优先）</option>
+            <option value="priority-asc">优先级（低优先）</option>
+          </select>
+        </div>
+        <div class="sidebar-section">
+          <h3>搜索</h3>
+          <input type="text" id="search-input" placeholder="搜索标题或描述...">
+        </div>
+        <div class="sidebar-section">
+          <h3>数据管理</h3>
+          <button id="export-btn" class="btn-secondary">导出数据</button>
+          <button id="import-btn" class="btn-secondary">导入数据</button>
+          <input type="file" id="import-file" accept=".json" style="display: none;">
+          <button id="manage-tags-btn" class="btn-secondary">管理标签</button>
+        </div>
+      </aside>
+
+      <main class="ideas-container">
+        <div id="ideas-list">
+          <!-- 动态生成的idea列表 -->
+        </div>
+      </main>
+    </div>
+
+    <!-- 新增/编辑Idea的模态框 -->
+    <div id="idea-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">新增Idea</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <form id="idea-form">
+          <input type="hidden" id="idea-id">
+          <div class="form-group">
+            <label for="idea-title">标题</label>
+            <input type="text" id="idea-title" required>
+          </div>
+          <div class="form-group">
+            <label for="idea-description">描述（支持Markdown、LaTeX数学公式）</label>
+            <textarea id="idea-description" rows="4"></textarea>
+          </div>
+          
+          <div class="form-toggle">
+            <hr class="form-divider-line">
+            <button type="button" id="toggle-details-btn" class="btn-secondary">展开详细选项</button>
+            <hr class="form-divider-line">
+          </div>
+          
+          <div class="collapsible-fields">
+            <div class="form-group">
+              <label for="idea-tags">标签（用逗号分隔）</label>
+              <input type="text" id="idea-tags" placeholder="例如：机器学习, 计算机视觉">
+            </div>
+            <div class="form-group">
+              <label for="idea-category">分类</label>
+              <input type="text" id="idea-category" placeholder="例如：机器学习、计算机视觉">
+            </div>
+            <div class="form-group">
+              <label for="idea-priority">优先级</label>
+              <select id="idea-priority">
+                <option value="low">低</option>
+                <option value="medium" selected>中</option>
+                <option value="high">高</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="idea-attachments">附件链接（每行一个）</label>
+              <textarea id="idea-attachments" rows="2" placeholder="https://example.com/paper.pdf"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="idea-date">日期</label>
+              <input type="date" id="idea-date">
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="cancel-btn">取消</button>
+            <button type="submit" class="btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 标签管理模态框 -->
+    <div id="tags-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>标签管理</h2>
+          <button class="close-btn" id="close-tags-modal">&times;</button>
+        </div>
+        <div class="tags-management">
+          <div id="tags-list">
+            <!-- 动态生成的标签列表 -->
+          </div>
+          <div class="tags-actions">
+            <button type="button" class="btn-secondary" id="close-tags-btn">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

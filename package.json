@@ -1,0 +1,62 @@
+{
+  "name": "stard",
+  "version": "1.0.0",
+  "description": "科研论文Idea记录器",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder --win",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "pack": "electron-packager . ResearchIdeaTracker --platform=win32 --arch=x64 --out=dist --overwrite --asar"
+  },
+  "keywords": [
+    "research",
+    "ideas",
+    "papers",
+    "electron"
+  ],
+  "author": "",
+  "license": "ISC",
+  "build": {
+    "appId": "com.research.idea-tracker",
+    "productName": "科研论文Idea记录器",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist",
+      "!.git",
+      "!node_modules/.cache"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "科研论文Idea记录器"
+    },
+    "portable": {
+      "artifactName": "ResearchIdeaTracker-portable.exe"
+    }
+  },
+  "devDependencies": {
+    "@electron/packager": "^19.1.0",
+    "electron": "^41.1.0",
+    "electron-builder": "^26.8.1"
+  },
+  "dependencies": {
+    "katex": "^0.16.44",
+    "marked": "^17.0.5"
+  }
+}
